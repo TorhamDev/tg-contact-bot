@@ -1,0 +1,13 @@
+CREATE TABLE `user` (
+        `uid` INTEGER PRIMARY KEY AUTOINCREMENT,
+        `username` VARCHAR(64) NULL,
+        `userid` VARCHAR(64) NULL,
+	`userkey` VARCHAR(64) NULL,
+        `created` DATE NULL
+);
+
+CREATE TABLE `started` (
+        `uid` INTEGER PRIMARY KEY AUTOINCREMENT,
+        `userid` VARCHAR(64) NULL,
+        `created` DATE NULL
+);
