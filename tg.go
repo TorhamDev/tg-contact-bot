@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	tele "gopkg.in/telebot.v3"
 	"log"
 	"tg-contact-bot/models"
@@ -31,19 +30,21 @@ func main() {
 
 	bot.Handle("/start", func(event tele.Context) error {
 
-		query := fmt.Sprintf("SELECT userid=%d FROM started", event.Sender().ID)
-		rows, err := db.Query(query)
-		models.CheckErr(err)
+		currentDate := models.GetCurrentDate()
+		userid := event.Sender().ID
 
-		if models.CheckExistsOnDB(rows) == false {
-			_, err := useridCourser.Exec(event.Sender().ID, "2020-12-09")
+		if models.CheckExistsUserStartedOnDB(db, userid) == false {
+			_, err := useridCourser.Exec(userid, currentDate)
 			models.CheckErr(err)
-			fmt.Println("New Start Added")
+
+			createUserReult := models.CreateUserData(event.Sender().Username, userid)
+
+			log.Println("New Start Added", " And database data response", createUserReult)
 		} else {
-			fmt.Println("old user send start command again")
+			log.Println("old user send start command again", userid)
 		}
 
-		return event.Send("Hello!")
+		return event.Send(models.GetStartText())
 	})
 
 	bot.Start()
