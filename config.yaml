@@ -1,5 +1,5 @@
 bot:
-  token: "5690050291:AAE1chcU-iel4sB1v2Ol34L68Kn9ovSb2EE"
+  token: "BOT-TOKEN"
   poller_time : 10
   db_name : "tg-bot.db"
 

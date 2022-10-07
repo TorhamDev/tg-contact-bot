@@ -78,3 +78,19 @@ func CreateUserData(username string, userid int64) bool {
 
 	return true
 }
+
+func GetUseridWithKey(db *sql.DB, userkey string) int64 {
+	var userid int64
+
+	sqlStmt := fmt.Sprintf("SELECT userid FROM user WHERE userkey='%s'", userkey)
+	rows, err := db.Query(sqlStmt, 1)
+	CheckErr(err)
+	for rows.Next() {
+		err := rows.Scan(&userid)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	return userid
+}
