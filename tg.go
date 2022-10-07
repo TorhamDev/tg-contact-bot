@@ -1,10 +1,12 @@
 package main
 
 import (
-	tele "gopkg.in/telebot.v3"
+	"fmt"
 	"log"
 	"tg-contact-bot/models"
 	"time"
+
+	tele "gopkg.in/telebot.v3"
 )
 
 func main() {
@@ -45,6 +47,30 @@ func main() {
 		}
 
 		return event.Send(models.GetStartText())
+	})
+
+	bot.Handle("/getkey", func(event tele.Context) error {
+		var (
+			userkey string
+		)
+
+		userid := event.Sender().ID
+
+		sqlStmt := fmt.Sprintf("SELECT userkey FROM user WHERE userid = %d", userid)
+
+		rows, err := db.Query(sqlStmt, 1)
+
+		models.CheckErr(err)
+
+		for rows.Next() {
+			err := rows.Scan(&userkey)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+
+		return event.Send(userkey)
+
 	})
 
 	bot.Start()
